@@ -1,7 +1,6 @@
-from flask import Flask, url_for, redirect, request, make_response, render_template, session
+from flask import Flask, url_for, redirect, request, make_response, render_template, session, send_from_directory
 
 app = Flask("Prva flask aplikacija")
-
 
 temperatura = []
 
@@ -9,6 +8,8 @@ app.secret_key = '_5#y2L"F4Q8z-n-xec]/'
 
 @app.before_request
 def before_request_func():
+    if request.path.startswith('/static'):
+        return  # Skip the login check for static files
     if request.path == '/login':
         return
     if session.get('username') is None:
@@ -17,11 +18,6 @@ def before_request_func():
 @app.get('/')
 def index():
     response = render_template('index.html')
-    return response, 200
-
-@app.get('/pocetna_stranica')
-def pocetna_stranica():
-    response = render_template('pocetna_stranica.html')
     return response, 200
 
 @app.get('/login')
@@ -44,7 +40,6 @@ def check():
         return redirect(url_for('index'))
     else:
         return redirect(url_for('login'))
-
 
 @app.post('/temperatura')
 def rect():

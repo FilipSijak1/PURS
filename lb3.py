@@ -12,22 +12,12 @@ def pocetna_stranica():
     return response, 200
 
 @app.post('/korisnicki_unos')
-def check():
-    username = request.form.get('username')
+def korisnicki_unos():
+    text = request.form.get('text')
     password = request.form.get('password')
     email = request.form.get('email')
 
-@app.post('/temperatura')
-def rect():
-    temp = request.json.get('temperatura')
-    if temp is not None:
-        global temperatura
-        temperatura.append(temp)
-        return 'Uspješno ste upisali', 201
-    else:
-        return 'Niste upisali ispravan ključ', 404
-
-     
+    return f"{text} + {password} + {email}"
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80)

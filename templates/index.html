@@ -4,40 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Početna stranica</title>
+    <link rel="stylesheet"  href="../static/styles.css">
 </head>
 <body>
-    <p>Username</p>
-    <img src="../static/user-icon.png" alt="Logo User Icon" width="70px">
-    <br>
-    <img src="../static/icon.png" alt="Logo Icon" width="70px">
-    <br>
-    <a href="/logout">Logout</a>
-    <a href="?id=1">Temperatura</a>
-    <a href="?id=2">Vlaga</a>
+    <div class="kont">
+    <header>
+        <div class="user">
+            <p>Username</p>
+            <img src="../static/user-icon.png" alt="User Icob" width="70px">  
+        </div>
+        <img class="slika2" src="../static/icon.png" alt="Icon" width="70px">
+    </header>
+    <nav>
+        <a href="/logout">Logout</a>
+        <a href="?id=1">Temperatura</a>
+        <a href="?id=2">Vlaga</a>
+    </nav>
+    <main>
     <table>
-        <tr>
-            <th>Vrijeme</th>
-            <th>Temperatura</th>
-            <th>Brisanje</th>
-        </tr>
-        <tr>
-            <td>Datum1</td>
-            <td>23</td>
-            <td><button>Obriši</button></td>
-        </tr>
-        <tr>
-            <td>Datum1</td>
-            <td>23</td>
-            <td><button>Obriši</button></td>
-        </tr>
-        <tr>
-            <td>Datum1</td>
-            <td>23</td>
-            <td><button>Obriši</button></td>
-        </tr>
-       
-        
-    </table>
+        <table>
+            <thead>
+                <tr>
+                    <th>Vrijeme</th>
+                    <th>Temperatura</th>
+                    <th>Brisanje</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Datum1</td>
+                    <td>23</td>
+                    <td><button>Obriši</button></td><br>
+                </tr>
+                <tr>
+                    <td>Datum1</td>
+                    <td>23</td>
+                    <td><button>Obriši</button></td><br>
+                </tr>
+                <tr>
+                    <td>Datum1</td>
+                    <td>23</td>
+                    <td><button>Obriši</button></td><br>
+                </tr>
+            </tbody>
+        </table>
+    </main>
 
+    </div>
 </body>
 </html>
