@@ -16,9 +16,6 @@ def check():
     username = request.form.get('username')
     password = request.form.get('password')
     email = request.form.get('email')
-    if username is not None:
-        global username
-        username.app
 
 @app.post('/temperatura')
 def rect():
