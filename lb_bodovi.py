@@ -12,10 +12,12 @@ def pocetna_stranica():
     return response, 200
 
 @app.post('/korisnicki_unos')
-def check():
-    username = request.form.get('username')
+def korisnicki_unos():
+    text = request.form.get('text')
     password = request.form.get('password')
     email = request.form.get('email')
+
+    return f"{text} + {password} + {email}"
 
 @app.post('/temperatura')
 def rect():

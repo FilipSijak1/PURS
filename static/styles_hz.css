@@ -1,0 +1,63 @@
+body{
+    background-image: url(../static/bijela_pozadina.png);
+}
+
+.kont{
+
+    margin-top: 30px;
+    background-color: rgb(255, 255, 255);
+    border-top:3px solid #fefefe;
+    border-radius: 5px;
+}
+
+header{
+    padding: 4px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-bottom: 10px;
+    margin-top: 5px;
+}
+
+.vlak{
+    margin-right: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.vlak > p {
+    display: inline-block;
+    color: #fffefe;
+    font-weight: bold;
+    font-family: Verdana;
+    font-size: larger;
+    margin-left: 30px;
+    margin-right: 10px;
+    
+}
+
+.vlak > a {
+    display: inline-block;
+    color: rgb(47, 102, 153);
+    font-weight: bold;
+    font-family: Verdana;
+    font-size: larger;
+    margin-left: 30px;
+    margin-right: 10px;
+    
+}
+
+nav{
+    display: flex;
+    height: 3vw;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    background-color:  rgb(47, 102, 153);
+    font-family: Calibri;
+ 
+}
+nav > a{
+    color: white;
+    text-decoration: None;
+    margin-left: 30px;
+}
