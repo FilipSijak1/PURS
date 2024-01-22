@@ -1,42 +1,49 @@
 from flask import Flask, request, redirect, url_for, render_template, session
+from flask import Flask, request, redirect, url_for, render_template, session, make_response
+from flask import g
+import MySQLdb
+import hashlib
 
 app = Flask("Prva flask aplikacija")
 app.secret_key = '_5#y2L"F4Q8z-n-xec]/'
 
-list = [
-    {
-        'datum': '18.1.2001',
-        'vrijednost': 18
-    },
-    {
-        'datum': '11.4.2004',
-        'vrijednost': 11
-    },
-    {
-        'datum': '17.6.1998',
-        'vrijednost': 17
-    },
-    {
-        'datum': '18.3.1973',
-        'vrijednost': 18
-    }
-]
-
 # Zadatak 2-4
 @app.before_request
 def before_request_func():
+    g.connection = MySQLdb.connect(host = "localhost", user = "app",
+                                   passwd = "1234", db = "lvj6")
+    g.cursor = g.connection.cursor()
     if request.path.startswith('/static'):
          return
     if request.path == '/login':
         return
     if session.get('username') is None:
         return redirect(url_for('login_page'))
+    
+@app.after_request
+def after_request_func(response):
+    g.connection.commit()
+    g.connection.close()
+    return response
 
 @app.get('/')
 def home_page():
-    global list
-    response = render_template('lb_05.html', title='Početna stranica', username=session.get("username"), temperature=list)
-    return response
+    id = request.args.get('id')
+    if id == None or id == '1':
+        g.cursor.execute(render_template('getKorisnikTemp.sql', id_korisnika = session.get('id')))
+        list_temp = g.cursor.fetchall()
+        response = render_template('lb_05.html', naslov = 'Početna stranica',
+                                   username = session.get('username').capitalize(), tip='Temperatura',
+                                   podatci = list_temp, tip_podatka = id)
+        return response, 200
+    elif id == '2':
+        g.cursor.execute(render_template('getKorisnikVlage.sql', id_korisnika = session.get('id')))
+        list_vlage = g.cursor.fetchall()
+        response = render_template('lb_05.html', naslov='Početna stranica',
+                                   username=session.get('username').capitalize(), tip='Vlaga',
+                                   podatci = list_vlage, tip_podatka = id)
+        return response, 200
+
 
 @app.get('/login')
 def login_page():
@@ -48,16 +55,72 @@ def logout():
     session.pop('username')
     return redirect(url_for('login_page'))
 
-@app.post('/login')
-def login():
-    username = request.form.get('username')
-    password = request.form.get('password')
+
+@app.post('/temperatura')
+def put_temperatura():
+    global temperatura
+    response = make_response()
+    if request.json.get('temperatura') is not None:
+        query = render_template('writeTemperature.sql',
+                                value=request.json.get('temperatura'))
+        g.cursor.execute(query)
+        response.data = 'Uspješno ste postavili temperaturu'
+        response.status_code = 201
+    else:
+        response.data = 'Niste napisali ispravan ključ'
+        response.status_code = 404
+    return response
+
+@app.route('/temperatura/<int:id_stupca>', methods = ['POST'])
+def delete(id_stupca):
+    id_podatka = request.args.get('id_podatka')
+
+    if id_podatka == '' or id_podatka == '1' and id_stupca is not None:
+        query = render_template('deleteTemp.sql', id_temp = id_stupca)
+        g.cursor.execute(query)
+        if id_podatka == '1':
+            return redirect(url_for('home_page', id = id_podatka))
+        else:
+            return redirect(url_for('home_page'))
     
-    if username == 'PURS' and password == '1234':
-        session['username'] = username
+    elif id_podatka == '2' and id_stupca is not None:
+        query = render_template('deleteVlaga.sql', id_vlage = id_stupca)
+        g.cursor.execute(query)
+        return redirect(url_for('home_page', id = id_podatka))
+
+    else:
+        return
+
+#@app.post('/login')
+#def login():
+    password = request.form.get('password')
+    hashed_password = hashlib.sha256(password.encode('utf-8')).hexdigest()
+    
+    print(f'Entered Password: {password}')
+    print(f'Hashed Password: {hashed_password}')
+
+    g.cursor.execute(render_template('getKorisnik.sql', user=request.form.get('username'), passwd=hashed_password))
+    korisnik = g.cursor.fetchall()
+
+    if korisnik != ():
+        session['username'] = korisnik[0][3]
+        session['id'] = korisnik[0][0]
         return redirect(url_for('home_page'))
     else:
         return render_template('login.html', title='Login stranica', poruka="Uneseni su pogrešni podatci")
+
+@app.post('/login')
+def login():
+    g.cursor.execute(render_template('getKorisnik.sql', user=request.form.get('username'), passwd=request.form.get('password')))
+    korisnik = g.cursor.fetchall()
+    if korisnik != ():
+        session['username'] = korisnik[0][3]
+        session['id'] = korisnik[0][0]
+        return redirect(url_for('home_page'))
+    else:
+        return render_template('login.html', title='Login stranica',
+                               poruka="Uneseni su pogrešni podatci")
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80)
