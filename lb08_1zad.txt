@@ -1,0 +1,34 @@
+// Definirajte pinove za LED žarulje
+const int ledPin1 = 2;
+const int ledPin2 = 3;
+
+void setup() {
+  // Inicijalizirajte serijsku komunikaciju
+  Serial.begin(9600);
+
+  // Postavite pinove kao izlaz
+  pinMode(ledPin1, OUTPUT);
+  pinMode(ledPin2, OUTPUT);
+}
+
+void loop() {
+  // Uključite prvu LED žarulju
+  digitalWrite(ledPin1, HIGH);
+  Serial.println("LED 1 uključena");
+  delay(1000);  // Držite je uključenu 1 sekundu
+
+  // Isključite prvu LED žarulju
+  digitalWrite(ledPin1, LOW);
+  Serial.println("LED 1 isključena");
+  delay(1000);  // Držite je isključenu 1 sekundu
+
+  // Uključite drugu LED žarulju
+  digitalWrite(ledPin2, HIGH);
+  Serial.println("LED 2 uključena");
+  delay(1000);  // Držite je uključenu 1 sekundu
+
+  // Isključite drugu LED žarulju
+  digitalWrite(ledPin2, LOW);
+  Serial.println("LED 2 isključena");
+  delay(1000);  // Držite je isključenu 1 sekundu
+}

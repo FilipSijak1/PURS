@@ -1,0 +1,52 @@
+#include <Arduino.h>
+
+// Definirajte pinove za LED žarulje
+const int redLedPin = 10;    // Crvena LED dioda
+const int greenLedPin = 11;  // Zelena LED dioda
+const int switchPin = 13;   // Digitalni ulaz za prekidač
+const int potPin = A0;      // Analogni ulaz za potenciometar
+const int pwmLedPin = A1;    // PWM pin za svjetleću diodu
+
+void setup() {
+  // Inicijalizirajte serijsku komunikaciju
+  Serial.begin(9600);
+
+  // Postavite pinove kao izlaz ili ulaz, ovisno o svrsi
+  pinMode(redLedPin, OUTPUT);
+  pinMode(greenLedPin, OUTPUT);
+  pinMode(switchPin, INPUT);
+  pinMode(pwmLedPin, OUTPUT);
+}
+
+void loop() {
+  // Čitajte stanje digitalnog ulaza
+  int switchState = digitalRead(switchPin);
+
+  // Uvjetno upravljanje LED diodama
+  if (switchState == HIGH) {
+    // Ako je prekidač u visokom stanju, uključite crvenu LED
+    digitalWrite(redLedPin, HIGH);
+    digitalWrite(greenLedPin, LOW);
+    Serial.println("Crvena LED uključena");
+  } else {
+    // Ako je prekidač u niskom stanju, uključite zelenu LED
+    digitalWrite(redLedPin, LOW);
+    digitalWrite(greenLedPin, HIGH);
+    Serial.println("Zelena LED uključena");
+  }
+
+  // Čitajte vrijednost potenciometra
+  int potValue = analogRead(potPin);
+
+  // Ispišite vrijednost potenciometra putem serijske komunikacije
+  Serial.print("Vrijednost potenciometra: ");
+  Serial.println(potValue);
+
+  // Postavite radni ciklus PWM-a za svjetleću diodu
+  int pwmValue = map(potValue, 0, 1023, 0, 255); // Mapiraj potValue u raspon od 0 do 255
+  analogWrite(pwmLedPin, pwmValue);
+
+  // Pauzirajte kratko prije sljedećeg čitanja
+  delay(100);
+}
+
