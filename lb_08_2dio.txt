@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-// Definirajte pinove za LED žarulje
+
 const int redLedPin = 10;    // Crvena LED dioda
 const int greenLedPin = 11;  // Zelena LED dioda
 const int switchPin = 13;   // Digitalni ulaz za prekidač

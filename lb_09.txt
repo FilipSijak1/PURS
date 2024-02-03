@@ -3,13 +3,13 @@
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
 
+StaticJsonDocument<200> doc;
+
 const char* SSID = "Lab1202";
 const char* PASSWORD = "%Pr0j3ct2021%";
 
-String serverName= "http://192.168.86.210/";
+const char *serverName= "http://ip.jsontest.com";
 HTTPClient http;
-
-StaticJsonDocument<200> doc;
 
 void setup() {
   Serial.begin(9600);
@@ -23,30 +23,22 @@ void setup() {
 }
 
 void loop(){
-  String ime= "Filip";
-  doc ["ime"] = ime;
-
-  String prezime= "Šijak";
-  doc ["prezime"] = prezime;
-
-  String ip= "192.168.86.211";
-  doc ["ip"] = ip;
-
-  String json;
-  serializeJson(doc, json);
-
   http.begin(serverName);
-  http.addHeader("Content-Type", "application/json");
 
-  int httpResponseCode= http.POST(json);
+  int httpResponseCode= http.GET();
 
   Serial.print("Status code: ");
   Serial.println(httpResponseCode);
-  Serial.println(http.getString());
+  String json = http.getString();
 
+  deserializeJson(doc, json);
+
+  const char *ip = doc["ip"];
+  Serial.print("Globalna ip adresa je: ");
+  Serial.println(ip); 
   http.end();
-
-  delay(1000);
+  delay(10000);
 
 }
+
 

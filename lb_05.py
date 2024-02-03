@@ -107,7 +107,7 @@ def delete(id_stupca):
         session['id'] = korisnik[0][0]
         return redirect(url_for('home_page'))
     else:
-        return render_template('login.html', title='Login stranica', poruka="Uneseni su pogrešni podatci")
+        return render_template('login.html', title='Login stranica', poruka="Uneseni su pogrešni podaci")
 
 @app.post('/login')
 def login():
@@ -119,7 +119,7 @@ def login():
         return redirect(url_for('home_page'))
     else:
         return render_template('login.html', title='Login stranica',
-                               poruka="Uneseni su pogrešni podatci")
+                               poruka="Uneseni su pogrešni podaci")
 
 
 if __name__ == '__main__':
